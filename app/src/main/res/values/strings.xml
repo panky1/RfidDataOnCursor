@@ -1,0 +1,170 @@
+<resources>
+    <string name="app_name">Viacom18AssetTrack</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="rfid_mapping">RFID Mapping</string>
+    <string name="scan_asset">Scan Asset</string>
+    <string name="asset_scrap">Asset Scrap</string>
+    <string name="asset_sold">Asset Sold</string>
+    <string name="loc_trans">Location \nTransfer</string>
+    <string name="developed">Developed By BCIL</string>
+    <string name="version">Version: 1.0.0</string>
+    <string name="enter_astno">Enter Asset No</string>
+    <string name="astno">Asset No</string>
+    <string name="scan_rfid">Scan RFID</string>
+    <string name="start">Start</string>
+    <string name="save">Save</string>
+    <string name="close">Close</string>
+    <string name="enter_loc">Enter Location</string>
+    <string name="enter_assetid">Enter AssetId</string>
+    <string name="enter_assetdesc">Enter Asset Desc</string>
+    <string name="asset_alloc">Asset Allocation</string>
+    <string name="asign">Assign</string>
+    <string name="reason">Enter Reason</string>
+    <string name="setting_icon_desc">Setting Icon</string>
+    <string name="title_activity_settings_detail">Setting Details</string>
+    <string name="password_connection_title">Connection password required !</string>
+    <string name="hint_password">Password</string>
+    <string name="cancel_title">Cancel</string>
+    <string name="connect_title">Connect</string>
+    <string name="title_serial">Serial</string>
+    <string name="colon">:</string>
+    <string name="title_model">Model</string>
+    <string name="batch_mode_running_title">Running in batch mode</string>
+    <string name="error_bluetooth_disabled">Please enable the bluetooth</string>
+    <string name="battery_status__critical_message">Battery is critical !\\nPlease charge the Sled</string>
+    <string name="battery_status_low_message">Battery is low !\\nPlease charge the Sled</string>
+    <string name="start_title">START</string>
+    <string name="stop_title">STOP</string>
+    <string name="error_disconnected">No Active Connection with Reader</string>
+    <string name="status_success_message">Settings Applied Successfully</string>
+    <string name="battery">Battery</string>
+    <string name="battery_critical_message">Status: Battery level is critical</string>
+    <string name="battery_low_message">Status: Battery level is low</string>
+    <string name="battery_full_message">Status: Battery is fully charged</string>
+    <string name="battery_charging_message">Status: Charging</string>
+    <string name="battery_discharging_message">Status: Discharging.</string>
+    <string name="battery_no_active_connection_message">Status: No active connection</string>
+    <string name="battery_percentage_text">0%</string>
+    <string name="battery_level_desc">Icon depicting level of battery in the reader</string>
+    <string name="save_config_progress_title">Saving Configuration...</string>
+    <string name="status_failure_message">Failed to apply settings</string>
+    <string name="available_readers_title">Available Readers</string>
+    <string name="none_paired">No Devices Found</string>
+    <string name="title_activity_readers_list">Readers List</string>
+    <string name="set_region_msg">Please set the region</string>
+    <string name="reader_conn_sett">Reader Connection Settings</string>
+    <string name="auto_reconnect_reader">Auto Reconnect Reader</string>
+    <string name="nfc_based_BT_connection">NFC</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="readers_available">Reader Available</string>
+    <string name="readers_connection">Reader Connection</string>
+    <string name="reader_battery_status">Reader Battery Status</string>
+    <string name="export_data_sett">Data Export Settings</string>
+    <string name="export_data">Export Data</string>
+    <string name="title_activity_application_settings">Application</string>
+    <string name="power_level_title">Power Level (dbm)</string>
+    <string name="link_profile_title">Link Profile</string>
+    <string name="tari_title">Tari</string>
+    <string name="title_activity_antenna_settings">Antenna</string>
+    <string name="error_invalid_fields_antenna_config">Invalid fields in antenna settings</string>
+    <string name="antenna_progress_title">Saving Antenna Settings...</string>
+    <string name="start_trigger_title">Start Trigger</string>
+    <string name="periodic_title">Period (ms)</string>
+    <string name="default_timeout">10000</string>
+    <string name="start_trigger_released_title">Trigger Released</string>
+    <string name="start_trigger_pressed">Trigger Pressed</string>
+    <string name="stop_trigger_title">Stop Trigger</string>
+    <string name="stop_trigger_released">Trigger Released</string>
+    <string name="stop_trigger_pressed">Trigger Pressed</string>
+    <string name="stop_trigger_timeout">Timeout (ms)</string>
+    <string name="duration_title">Duration</string>
+    <string name="stop_trigger_tag_observation">Tag Observation</string>
+    <string name="default_tag_observe_count">100</string>
+    <string name="stop_trigger_attempts">No. of Attempts</string>
+    <string name="default_no_of_attempts">10</string>
+    <string name="title_activity_start_stop_trigger">Start\\\\Stop Triggers</string>
+    <string name="error_empty_fields_start_trigger">Empty fields in start trigger settings</string>
+    <string name="error_empty_fields_stop_trigger">Empty fields in stop trigger settings</string>
+    <string name="start_stop_progress_title">saving start/stop triggers...</string>
+    <string name="save_antenna_title">ANTENNA</string>
+    <string name="save_antenna_power">Antenna Power</string>
+    <string name="save_link_profile">Link Profile</string>
+    <string name="save_singulation_title">SINGULATION</string>
+    <string name="save_seesion">Session</string>
+    <string name="tag_population_title">Tag Population</string>
+    <string name="inv_state_title">Inventory State</string>
+    <string name="sl_flag_title">SL Flag</string>
+    <string name="save_tag_report_title">TAG REPORT</string>
+    <string name="pc">PC</string>
+    <string name="off">OFF</string>
+    <string name="rssi">RSSI</string>
+    <string name="phase">Phase</string>
+    <string name="channel_index">Channel Index</string>
+    <string name="tag_seen_count">Tag Seen Count</string>
+    <string name="report_unique_tags">Report Unique tags</string>
+    <string name="save_config_batch_mode_title">BATCH MODE</string>
+    <string name="batch_mode_title">Batchmode</string>
+    <string name="save_dpo_title">POWER MANAGEMENT</string>
+    <string name="dynamic_power_title">Dynamic power</string>
+    <string name="save_start_stop_title">START \\\\ STOP TRIGGERS</string>
+    <string name="save_beeper_title">BEEPER</string>
+    <string name="sled_beeper_title">Sled Beeper</string>
+    <string name="save_sled_beeper_volume_title">Beeper volume</string>
+    <string name="save_to_sled">SAVE</string>
+    <string name="title_activity_save_configuration">Save Configuration</string>
+    <string name="err_access_op_failed">Access operation Failed</string>
+    <string name="msg_write_succeed">Write succeed</string>
+    <string name="error_reader_not_updated">Reader capabilities not updated</string>
+    <string name="write">Write</string>
+    <string name="dpo_message_title">Dynamic Power optimization configures the reader for best battery life and works with Pre configured settings. Dynamic Power optimization works only for inventory operation</string>
+    <string name="title_activity_dpo_settings">Power Management</string>
+    <string name="my_keyboard">CustomKeyboard</string>
+    <string-array name="start_trigger_array">
+        <item>Immediate</item>
+        <item>Handheld</item>
+        <item>Periodic</item>
+    </string-array>
+    <string-array name="stop_trigger_array">
+        <item>Immediate</item>
+        <item>Handheld</item>
+        <item>Duration</item>
+        <item>Tag Observation</item>
+        <item>N attempts</item>
+    </string-array>
+    <string-array name="session_array">
+        <item>S0</item>
+        <item>S1</item>
+        <item>S2</item>
+        <item>S3</item>
+    </string-array>
+    <string-array name="tag_population_array">
+        <item>30</item>
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>600</item>
+    </string-array>
+    <string-array name="inventory_state_array">
+        <item>STATE A</item>
+        <item>STATE B</item>
+        <item>AB FLIP</item>
+    </string-array>
+    <string-array name="sl_flags_array">
+        <item>ALL</item>
+        <item>DEASSERTED</item>
+        <item>ASSERTED</item>
+    </string-array>
+    <string-array name="batch_modes_array">
+        <item>Disable</item>
+        <item>Auto</item>
+        <item>Enable</item>
+    </string-array>
+    <string-array name="beeper_volume_array">
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
+    <string name="subtype_en_US">English (US)</string>
+</resources>

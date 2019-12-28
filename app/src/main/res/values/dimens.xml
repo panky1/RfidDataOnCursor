@@ -1,0 +1,36 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="cardview_margin">156dp</dimen>
+    <dimen name="margin_2">2dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_24">24dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+    <dimen name="padding_2">2dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="padding_20">20dp</dimen>
+    <dimen name="padding_56">56dp</dimen>
+    <dimen name="padding_5">5dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
+    <dimen name="list_horizontal_margin">8dp</dimen>
+    <dimen name="settings_list_text_size">16sp</dimen>
+    <dimen name="default_padding">10dp</dimen>
+    <dimen name="reader_list_item_padding">5dp</dimen>
+    <dimen name="default_top_margin">10dp</dimen>
+    <dimen name="default_margin">10dp</dimen>
+    <dimen name="small_spinner_font">12sp</dimen>
+    <dimen name="custom_spinner_font">15sp</dimen>
+    <dimen name="default_left_padding">10dp</dimen>
+    <dimen name="default_right_margin">10dp</dimen>
+    <dimen name="default_bottom_margin">10dp</dimen>
+</resources>

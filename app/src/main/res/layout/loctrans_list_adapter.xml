@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="530dp"
+    android:layout_height="wrap_content">
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#686767" />
+
+    <LinearLayout
+        android:id="@+id/llContainer2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#686767" />
+        <CheckBox
+            android:id="@+id/cbCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#686767" />
+
+        <com.bcil.demoassettrack.custom.CustomTextViewThin
+            android:id="@+id/tvRfid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.8"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="RFID"
+            android:visibility="visible"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#686767"
+            android:visibility="visible"
+            />
+
+        <com.bcil.demoassettrack.custom.CustomTextViewThin
+            android:id="@+id/tvAssetId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="Asset No"
+            android:visibility="visible"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#686767"
+            android:visibility="visible"
+            />
+
+        <com.bcil.demoassettrack.custom.CustomTextViewThin
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="Count"
+            android:visibility="gone"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#686767"
+            android:visibility="gone"/>
+
+        <com.bcil.demoassettrack.custom.CustomTextViewThin
+            android:id="@+id/tvLoc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="Location"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#686767" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#686767" />
+</LinearLayout>
