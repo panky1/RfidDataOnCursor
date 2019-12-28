@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
@@ -129,22 +130,7 @@ public class MyKeyboard extends InputMethodService
         super.onCreate();
          stringList = new ArrayList<>();
 
-        IntentFilter intentFilter = new IntentFilter(
-                "android.intent.action.MAIN");
 
-        mReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //extract our message from intent
-                getData = intent.getStringExtra(AppConstants.RFIDDATA);
-                //log our message value
-                Log.i("ONRECEIVE:", getData);
-
-            }
-        };
-        //registering our receiver
-        this.registerReceiver(mReceiver, intentFilter);
     }
         /*InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(mInputView, 0);
@@ -190,55 +176,74 @@ public class MyKeyboard extends InputMethodService
     @Override
     public View onCreateInputView() {
         syms = false;
-        preferenceManager = new PreferenceManager(getApplicationContext());
         InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(mInputView, 0);
+
         inputConnection = getCurrentInputConnection();
-        Timer t = new Timer();
-//Set the schedule function and rate
-        t.scheduleAtFixedRate(new TimerTask() {
 
-                                  @Override
-                                  public void run() {
-                                      if (getData != null) {
-                                          stringList.add(getData);
-                                          if(stringList!=null&&stringList.size()>0){
-                                              inputConnection.commitText(getData, 1);
-                                          }
-                                          Objects.requireNonNull(stringList).clear();
+        IntentFilter intentFilter = new IntentFilter(
+                "android.intent.action.MAIN");
 
-                                      } else {
-                                          inputConnection.commitText(AppConstants.EMPTY, 1);
-                                      }
-                                  }
+        mReceiver = new BroadcastReceiver() {
 
-                              },
-//Set how long before to start calling the TimerTask (in milliseconds)
-                0,
-//Set the amount of time between each execution (in milliseconds)
-                1000);
-
-
-
-               /* inputConnection.commitText(preferenceManager.getPreferenceValues(AppConstants.RFIDDATA), 1);
-                inputConnection.sendKeyEvent(new KeyEvent(ACTION_DOWN,EditorInfo.IME_ACTION_SEND));
-                Log.d(MyKeyboard.class.getSimpleName(), "RFIDDATAONCREATE:"+preferenceManager.getPreferenceValues(AppConstants.RFIDDATA));
-                handler.postDelayed(this, 1000);*/
-//                preferenceManager.putPreferenceValues(AppConstants.RFIDDATA,AppConstants.EMPTY);
-        /*inputConnection.commitText(new AssetInfo().getRfid()*//*preferenceManager.getPreferenceValues(AppConstants.RFIDDATA)*//*, 1);
-                inputConnection.sendKeyEvent(new KeyEvent(ACTION_DOWN,EditorInfo.IME_ACTION_SEND));
-                if(new AssetInfo().getRfid()!=null){
-                    getData = new AssetInfo().getRfid();
-                }else {
-                    getData = AppConstants.EMPTY;
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //extract our message from intent
+                getData = intent.getStringExtra(AppConstants.RFIDDATA);
+                //log our message value
+                Log.i("ONRECEIVE:", getData);
+                if (getData != null) {
+                    stringList.add(getData);
+                    if(stringList!=null&&stringList.size()>0){
+                        inputConnection.commitText(stringList.get(0)+"\n", 1);
+                    }
+                    Objects.requireNonNull(stringList).clear();
+                    Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
+                } else {
+                    inputConnection.commitText(AppConstants.EMPTY, 1);
                 }
-                Log.d(MyKeyboard.class.getSimpleName(), "RFIDDATAONKEYBOARD:"+*//*preferenceManager.getPreferenceValues(AppConstants.RFIDDATA)*//*getData);
-                handler.postDelayed(this, 1000);
-                new AssetInfo().setRfid(AppConstants.EMPTY);*/
-           /* }
-        };
-        handler.postDelayed(runnable, 1000);*/
 
+            }
+        };
+        //registering our receiver
+        this.registerReceiver(mReceiver, intentFilter);
+
+    /*
+        InputMethodManager inputManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        inputManager.restartInput(mInputView);
+
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(mInputView, InputMethodManager.SHOW_IMPLICIT);*/
+       /* inputConnection = getCurrentInputConnection();
+        if (getData != null) {
+            stringList.add(getData);
+            if(stringList!=null&&stringList.size()>0){
+                inputConnection.commitText(stringList.get(0)+"\n", 1);
+            }
+            Objects.requireNonNull(stringList).clear();
+            Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
+        } else {
+            inputConnection.commitText(AppConstants.EMPTY, 1);
+        }*/
+        /*Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (getData != null) {
+                    stringList.add(getData);
+                    if(stringList!=null&&stringList.size()>0){
+                        inputConnection.commitText(stringList.get(0)+"\n", 1);
+                    }
+                    Objects.requireNonNull(stringList).clear();
+                    Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
+                } else {
+                    inputConnection.commitText(AppConstants.EMPTY, 1);
+                }
+                Log.d(MyKeyboard.class.getSimpleName(), "RFIDDATAONKEYBOARD:" +getData);
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        handler.postDelayed(runnable, 1000);*/
 
         Log.d(MyKeyboard.class.getSimpleName(), "onCreateInputView: ");
         return createKeyboard1();
@@ -271,7 +276,7 @@ public class MyKeyboard extends InputMethodService
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
-//        inputConnection = getCurrentInputConnection();
+        inputConnection = getCurrentInputConnection();
         playClick(primaryCode);
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
@@ -418,28 +423,50 @@ public class MyKeyboard extends InputMethodService
      * Start the barcode scanner
      */
     private void tagScanButton() {
-//        startInventory();
-//        captureScanData();
-//        new MainActivity().captureScanData();
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                inputConnection.commitText(new AssetInfo().getRfid()/*preferenceManager.getPreferenceValues(AppConstants.RFIDDATA)*/, 1);
-                inputConnection.sendKeyEvent(new KeyEvent(ACTION_DOWN, EditorInfo.IME_ACTION_SEND));
-                if (new AssetInfo().getRfid() != null) {
-                    getData = new AssetInfo().getRfid();
+                if (getData != null) {
+                    stringList.add(getData);
+                    if(stringList!=null&&stringList.size()>0){
+                        inputConnection.commitText(stringList.get(0)+"\n", 1);
+                    }
+                    Objects.requireNonNull(stringList).clear();
+                    Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
                 } else {
-                    getData = AppConstants.EMPTY;
+                    inputConnection.commitText(AppConstants.EMPTY, 1);
                 }
-                Log.d(MyKeyboard.class.getSimpleName(), "RFIDDATAONKEYBOARD:" +/*preferenceManager.getPreferenceValues(AppConstants.RFIDDATA)*/getData);
+                Log.d(MyKeyboard.class.getSimpleName(), "RFIDDATAONKEYBOARD:" +getData);
                 handler.postDelayed(this, 1000);
-                new AssetInfo().setRfid(AppConstants.EMPTY);
-//               preferenceManager.putPreferenceValues(AppConstants.RFIDDATA,preferenceManager.getPreferenceValues(AppConstants.RFIDDATA));
             }
         };
 
         handler.postDelayed(runnable, 1000);
 
+        /*Timer t = new Timer();
+//Set the schedule function and rate
+        t.scheduleAtFixedRate(new TimerTask() {
+
+                                  @Override
+                                  public void run() {
+                                      if (getData != null) {
+                                          stringList.add(getData);
+                                          if(stringList!=null&&stringList.size()>0){
+                                              inputConnection.commitText(getData, 1);
+                                          }
+                                          Objects.requireNonNull(stringList).clear();
+                                          Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
+                                      } else {
+                                          inputConnection.commitText(AppConstants.EMPTY, 1);
+                                      }
+                                  }
+
+                              },
+//Set how long before to start calling the TimerTask (in milliseconds)
+                0,
+//Set the amount of time between each execution (in milliseconds)
+                1000);*/
     }
 
     private void captureScanData() {

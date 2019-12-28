@@ -149,7 +149,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 aTAstDsc.setText(assetInfo.getAssetdesc());
                 etAssetNo.setText(aTAstId.getText().toString().trim());
                 new CommonUtils().hideKeyboardOnLeaving(Objects.requireNonNull(getActivity()));
-                etScan.requestFocus();
+//                etScan.requestFocus();
             }
         });
         aTAstDsc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -159,7 +159,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 aTAstId.setText(assetInfo.getAssetid());
                 etAssetNo.setText(assetInfo.getAssetid());
                 new CommonUtils().hideKeyboardOnLeaving(Objects.requireNonNull(getActivity()));
-                etScan.requestFocus();
+//                etScan.requestFocus();
             }
         });
         etScan.addTextChangedListener(new TextWatcher() {
@@ -228,11 +228,12 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("RFID Mapping");
+        etScan.setVisibility(View.GONE);
         databaseHandler = Room.databaseBuilder(getActivity(),
                 DatabaseHandler.class, "viacom-db")
                 .build();
         getUserName = preferenceManager.getPreferenceValues(AppConstants.USERNAME);
-        etScan.requestFocus();
+//        etScan.requestFocus();
         etAssetNo.setEnabled(false);
         etAssetNo.setInputType(InputType.TYPE_NULL);
         etAssetNo.setFocusable(false);
