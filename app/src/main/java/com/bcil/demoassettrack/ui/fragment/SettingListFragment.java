@@ -170,7 +170,7 @@ public class SettingListFragment extends ListFragment {
             case android.R.id.home:
                 FragmentTransaction fragmentTransaction
                         = getFragmentManager().beginTransaction();
-                MainMenuFragment mainMenuFragment = new MainMenuFragment();
+                MappingFragment mainMenuFragment = new MappingFragment();
                 fragmentTransaction.replace(R.id.main_container, mainMenuFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();

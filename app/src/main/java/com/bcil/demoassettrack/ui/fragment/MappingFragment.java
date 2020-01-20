@@ -70,7 +70,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.bcil.demoassettrack.utils.MyKeyboard.inputConnection;
 
 public class MappingFragment extends Fragment implements ResponseHandlerInterfaces.ResponseTagHandler, ResponseHandlerInterfaces.TriggerEventHandler, ResponseHandlerInterfaces.BatchModeEventHandler, ResponseHandlerInterfaces.ResponseStatusHandler, OnRefreshListener {
 
@@ -97,7 +96,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
     public String writeData;
     private int status;
     private ArrayList<AssetInfo> assetInfoList1;
-    private Handler handler = new Handler();
+
 
     @Nullable
     @Override
@@ -245,7 +244,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
-        menu.findItem(R.id.action_setting).setVisible(false);
+        menu.findItem(R.id.action_logout).setVisible(false);
     }
 
     @Override
@@ -257,12 +256,38 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 new MainActivity().i = 0;
                 getRfidData = null;
                 triggerReleaseEventRecieved();
-                MainMenuFragment mainMenuFragment = new MainMenuFragment();
+                /*MainMenuFragment mainMenuFragment = new MainMenuFragment();
                 FragmentTransaction fragmentTransaction
                         = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.main_container, mainMenuFragment);
                 fragmentTransaction.addToBackStack(MappingFragment.class.getSimpleName());
-                fragmentTransaction.commit();
+                fragmentTransaction.commit();*/
+                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                builder.setMessage("Are you sure you want to exit")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Objects.requireNonNull(getActivity()).finish();
+                            }
+                        })
+
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                arg0.dismiss();
+                            }
+                        });
+                android.support.v7.app.AlertDialog alert = builder.create();
+                alert.show();
+                return true;
+            case R.id.action_setting:
+                SettingListFragment settingsFragment = new SettingListFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction5
+                        = getFragmentManager().beginTransaction();
+                fragmentTransaction5.replace(R.id.main_container,settingsFragment);
+                fragmentTransaction5.addToBackStack(null);
+                fragmentTransaction5.commit();
                 return true;
             case R.id.action_logout:
                 preferenceManager.putPreferenceIntValues(AppConstants.RFIDSCANSTATUS, 0);
@@ -326,13 +351,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
             etScan.requestFocus();
         getRfidData = inventoryListItem.getMemoryBankData();
         if (getRfidData != null) {
-            /*tagIDField = getRfidData;
-            offset = "2";
-            writeData = "AD1234567890123456700020";*/
-            if (etScan != null) {
-//                etScan.setText(getRfidData);
-                preferenceManager.putPreferenceValues(AppConstants.RFIDDATA,getRfidData);
-//                new AssetInfo().setRfid(getRfidData);
+            /*if (etScan != null) {*/
                 Intent i = new Intent("android.intent.action.MAIN").putExtra(AppConstants.RFIDDATA, getRfidData);
                 Objects.requireNonNull(getActivity()).sendBroadcast(i);
                 if(getRfidData!=null){
@@ -340,23 +359,13 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 }else{
                     Log.d(MappingFragment.class.getSimpleName(), "GETRFIDDATA:"+"null");
                 }
-               /* Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        inputConnection.commitText(new AssetInfo().getRfid(), 1);
-                        handler.postDelayed(this, 1000);
-                        new AssetInfo().setRfid("");
-                    }
-                };
-
-                handler.postDelayed(runnable, 1000);*/
-//                etScan.setSelection(etScan.getText().toString().length());
-            }
-        } else {
+//            }
+        }
+       /* else {
             if (etScan != null)
                 new AssetInfo().setRfid("123");
 //                etScan.setText(AppConstants.EMPTY);
-        }
+        }*/
 
     }
 

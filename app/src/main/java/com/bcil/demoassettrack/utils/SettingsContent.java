@@ -18,10 +18,11 @@ public class SettingsContent {
     static {
         // Add items.
         addItem(new SettingItem("1", "Readers List"/*,"Available Readers"*/, R.drawable.title_rdl));
-        addItem(new SettingItem("2", "Application"/*,"Settings"*/, R.drawable.title_sett));
-        addItem(new SettingItem("3", "Antenna",/*"Set Antenna parameters",*/R.drawable.title_antn));
-        addItem(new SettingItem("4", "Start\\Stop Triggers",/*"Region and channels",*/R.drawable.title_strstp));
-        addItem(new SettingItem("5", "Power Management",/*"Version information",*/R.drawable.title_dpo_disabled));
+//        addItem(new SettingItem("2", "Application"/*,"Settings"*/, R.drawable.title_sett));
+        addItem(new SettingItem("2", "Antenna",/*"Set Antenna parameters",*/R.drawable.title_antn));
+//        addItem(new SettingItem("4", "Start\\Stop Triggers",/*"Region and channels",*/R.drawable.title_strstp));
+//        addItem(new SettingItem("5", "Power Management",/*"Version information",*/R.drawable.title_dpo_disabled));
+        addItem(new SettingItem("3", "Battery",/*"Configurations",*/R.drawable.title_batt));
 //        addItem(new SettingItem("8", "Battery",/*"Configurations",*/R.drawable.title_batt));
 //        addItem(new SettingItem("9", "Power Management",/*"Version information",*/R.drawable.title_dpo_disabled));
 //        addItem(new SettingItem("10", "Beeper",/*"Status",*/R.drawable.title_beep));

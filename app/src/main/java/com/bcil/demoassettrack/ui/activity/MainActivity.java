@@ -74,6 +74,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements Readers.RFIDReaderEventHandler {
     private static final String MSG_WRITE = "Writing Data";
@@ -147,117 +148,7 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
         preferenceManager = new PreferenceManager(MainActivity.this);
         initBluetooth();
         initData();
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ContextCompat.startForegroundService(this,new Intent(MainActivity.this, MyKeyboard.class));
-
-        }else {
-            startService(new Intent(MainActivity.this,MyKeyboard.class));
-        }*/
-//        callAutoStartEvent();
     }
-
-    private void callAutoStartEvent() {
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("To receive Notifications Properly AmulAssetTracking needs to enabled in Security App-Autostart. Do you want to enable it now?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        try{
-                            Intent intent1 = new Intent();
-                            if (AppConstants.XIAOMIMANUFACTURER.equalsIgnoreCase(Build.MANUFACTURER)) {
-                                //this will open auto start screen where user can enable permission for your app
-                                intent1.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
-                                preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                startActivity(intent1);
-                            } else if (AppConstants.OPPOMANUFACTURER.equalsIgnoreCase(Build.MANUFACTURER)) {
-                                try{
-                                    intent1.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"));
-                                    preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                    startActivity(intent1);
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                    try{
-                                        Intent i = new Intent(Intent.ACTION_MAIN);
-                                        preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                        i.setComponent(new ComponentName("com.oppo.safe", "com.oppo.safe.permission.startup.StartupAppListActivity"));
-                                        startActivity(i);
-                                    }catch (Exception e1){
-                                        e1.printStackTrace();
-                                        try{
-                                            Intent intent = new Intent();
-                                            intent.setClassName("com.coloros.safecenter",
-                                                    "com.coloros.safecenter.startupapp.StartupAppListActivity");
-                                            preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                            startActivity(intent);
-                                        }catch (Exception e2){
-                                            e2.printStackTrace();
-                                        }
-                                    }
-                                }
-                            } else if (AppConstants.VIVOMANUFACTURER.equalsIgnoreCase(Build.MANUFACTURER)) {
-                                try{
-                                    intent1.setComponent(new ComponentName("com.vivo.permissikonmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"));
-                                    preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                    startActivity(intent1);
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                    try{
-                                        Intent intent = new Intent();
-                                        intent.setComponent(new ComponentName("com.iqoo.secure",
-                                                "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity"));
-                                        preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                        startActivity(intent);
-                                    }catch (Exception e1){
-                                        e1.printStackTrace();
-                                        try{
-                                            Intent intent = new Intent();
-                                            intent.setComponent(new ComponentName("com.vivo.permissionmanager",
-                                                    "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"));
-                                            preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                            startActivity(intent);
-                                        }catch (Exception e2){
-                                            e2.printStackTrace();
-                                            try {
-                                                Intent intent = new Intent();
-                                                intent.setClassName("com.iqoo.secure",
-                                                        "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager");
-                                                preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                                startActivity(intent);
-                                            }catch (Exception e3){
-                                                e3.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                }
-
-                            } else if (AppConstants.HUAWEIMANUFACTURER.equalsIgnoreCase(Build.MANUFACTURER)) {
-                                try{
-                                    intent1.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
-                                    preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, "1");
-                                    startActivity(intent1);
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-
-                    }
-                })
-
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        preferenceManager.putPreferenceValues(AppConstants.AUTOSTARTSTATE, null);
-                        arg0.dismiss();
-                    }
-                });
-        android.support.v7.app.AlertDialog alert = builder.create();
-        alert.show();
-    }
-
 
     private void initBluetooth() {
         MyApp.eventHandler = new EventHandler();
@@ -284,10 +175,17 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
     }
 
     private void initData() {
-        MainMenuFragment mainMenuFragment = new MainMenuFragment();
+      /*  MainMenuFragment mainMenuFragment = new MainMenuFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction
                 = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_container, mainMenuFragment, TAG_CONTENT_FRAGMENT);
+        fragmentTransaction.commit();*/
+
+        MappingFragment mappingFragment = new MappingFragment();
+        android.support.v4.app.FragmentTransaction fragmentTransaction
+                = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container,mappingFragment,MainActivity.TAG_CONTENT_FRAGMENT);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -583,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
         }
     }
 
-    public void clearInventoryData() {
+    private void clearInventoryData() {
         MyApp.TOTAL_TAGS = 0;
         MyApp.mRRStartedTime = 0;
         MyApp.UNIQUE_TAGS = 0;
@@ -1255,20 +1153,15 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void inventoryStartOrStop(View v) {
         Button button = (Button) v;
-        captureScanData();
-
-    }
-
-    public void captureScanData() {
         if (isBluetoothEnabled()) {
             if (MyApp.mConnectedReader != null && MyApp.mConnectedReader.isConnected()) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_CONTENT_FRAGMENT);
-//                preferenceManager.putPreferenceIntValues(AppConstants.BUTTONCLICK,i++);
+                preferenceManager.putPreferenceIntValues(AppConstants.BUTTONCLICK,i++);
                 if (!MyApp.mIsInventoryRunning) {
                     clearInventoryData();
-                   /* if(button!=null)
-                    button.setText("STOP");*/
-//                    preferenceManager.putPreferenceIntValues(AppConstants.RFIDSCANSTATUS,0);
+                    if(button!=null)
+                    button.setText("STOP");
+                    preferenceManager.putPreferenceIntValues(AppConstants.RFIDSCANSTATUS,0);
                     rfidListAdapter = new RfidListAdapter(MainActivity.this,new ArrayList<AssetInfo>());
                     rfidListAdapter.clear();
                     rfidListAdapter.notifyDataSetChanged();
@@ -1285,9 +1178,6 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
                         ((AssetScrapFragment) fragment).resetTagsInfo();
                     }else if (fragment instanceof AssetSoldFragment) {
                         ((AssetSoldFragment) fragment).resetTagsInfo();
-                    }else {
-                        if (MyApp.inventoryList != null && MyApp.inventoryList.size() > 0)
-                            MyApp.inventoryList.clear();
                     }
                     //set flag value
                     isInventoryAborted = false;
@@ -1340,8 +1230,8 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
 
 
                 } else if (MyApp.mIsInventoryRunning) {
-                    /*if(button!=null)
-                    button.setText("START");*/
+                    if(button!=null)
+                    button.setText("START");
                     isInventoryAborted = true;
                     //Here we send the abort command to stop the inventory
                     try {

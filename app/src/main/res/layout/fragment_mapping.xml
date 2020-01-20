@@ -252,6 +252,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"
+                android:visibility="gone"
                 android:textStyle="bold"
                 android:background="@drawable/button_style_close"
                 />

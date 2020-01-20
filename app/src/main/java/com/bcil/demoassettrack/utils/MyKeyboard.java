@@ -123,8 +123,7 @@ public class MyKeyboard extends InputMethodService
     private String getData;
     private BroadcastReceiver mReceiver;
     private List<String> stringList;
-
-
+    private Runnable runnable;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -175,11 +174,27 @@ public class MyKeyboard extends InputMethodService
 
     @Override
     public View onCreateInputView() {
-        syms = false;
+//        syms = false;
+        scan = true;
         InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(mInputView, 0);
-
+        stringList.clear();
         inputConnection = getCurrentInputConnection();
+
+
+       /* runnable = new Runnable() {
+            @Override
+            public void run() {
+                stringList.clear();
+
+                //registering our receiver
+
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+//Start
+        handler.postDelayed(runnable, 1000);*/
 
         IntentFilter intentFilter = new IntentFilter(
                 "android.intent.action.MAIN");
@@ -194,56 +209,21 @@ public class MyKeyboard extends InputMethodService
                 Log.i("ONRECEIVE:", getData);
                 if (getData != null) {
                     stringList.add(getData);
-                    if(stringList!=null&&stringList.size()>0){
+                    Log.d(TAG, "CheckListSize:"+stringList.size());
+                    if(stringList!=null&&stringList.size()==1){
                         inputConnection.commitText(stringList.get(0)+"\n", 1);
                     }
-                    Objects.requireNonNull(stringList).clear();
+
                     Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
                 } else {
                     inputConnection.commitText(AppConstants.EMPTY, 1);
+                    Log.d(TAG, "onReceive:"+"IF DATA IS NULL");
                 }
 
             }
         };
-        //registering our receiver
-        this.registerReceiver(mReceiver, intentFilter);
+        registerReceiver(mReceiver, intentFilter);
 
-    /*
-        InputMethodManager inputManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-        inputManager.restartInput(mInputView);
-
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(mInputView, InputMethodManager.SHOW_IMPLICIT);*/
-       /* inputConnection = getCurrentInputConnection();
-        if (getData != null) {
-            stringList.add(getData);
-            if(stringList!=null&&stringList.size()>0){
-                inputConnection.commitText(stringList.get(0)+"\n", 1);
-            }
-            Objects.requireNonNull(stringList).clear();
-            Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
-        } else {
-            inputConnection.commitText(AppConstants.EMPTY, 1);
-        }*/
-        /*Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (getData != null) {
-                    stringList.add(getData);
-                    if(stringList!=null&&stringList.size()>0){
-                        inputConnection.commitText(stringList.get(0)+"\n", 1);
-                    }
-                    Objects.requireNonNull(stringList).clear();
-                    Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
-                } else {
-                    inputConnection.commitText(AppConstants.EMPTY, 1);
-                }
-                Log.d(MyKeyboard.class.getSimpleName(), "RFIDDATAONKEYBOARD:" +getData);
-                handler.postDelayed(this, 1000);
-            }
-        };
-
-        handler.postDelayed(runnable, 1000);*/
 
         Log.d(MyKeyboard.class.getSimpleName(), "onCreateInputView: ");
         return createKeyboard1();
@@ -275,7 +255,7 @@ public class MyKeyboard extends InputMethodService
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
-
+        stringList.clear();
         inputConnection = getCurrentInputConnection();
         playClick(primaryCode);
         switch (primaryCode) {
@@ -319,13 +299,14 @@ public class MyKeyboard extends InputMethodService
                 createKeyboard();
                 break;
             default:
-                char code = (char) primaryCode;
+//                tagScanButton();
+                /*char code = (char) primaryCode;
                 if (Character.isLetter(code) && caps) {
                     code = Character.toUpperCase(code);
                 }
                 if ((primaryCode != 13) || (primaryCode != 14) || (primaryCode != 15) || (primaryCode != 16) || (primaryCode != 16)) {
                     // ToScreen(code);
-                }
+                }*/
                 break;
         }
     }
@@ -443,30 +424,6 @@ public class MyKeyboard extends InputMethodService
         };
 
         handler.postDelayed(runnable, 1000);
-
-        /*Timer t = new Timer();
-//Set the schedule function and rate
-        t.scheduleAtFixedRate(new TimerTask() {
-
-                                  @Override
-                                  public void run() {
-                                      if (getData != null) {
-                                          stringList.add(getData);
-                                          if(stringList!=null&&stringList.size()>0){
-                                              inputConnection.commitText(getData, 1);
-                                          }
-                                          Objects.requireNonNull(stringList).clear();
-                                          Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
-                                      } else {
-                                          inputConnection.commitText(AppConstants.EMPTY, 1);
-                                      }
-                                  }
-
-                              },
-//Set how long before to start calling the TimerTask (in milliseconds)
-                0,
-//Set the amount of time between each execution (in milliseconds)
-                1000);*/
     }
 
     private void captureScanData() {

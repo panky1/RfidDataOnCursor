@@ -74,20 +74,21 @@ public class SettingsDetailActivity extends AppCompatActivity implements Respons
                 break;
 
             case 2:
-                fragment = ApplicationSettingsFragment.newInstance();
+//                fragment = ApplicationSettingsFragment.newInstance();
+                fragment = AntennaSettingsFragment.newInstance();
                 break;
 
             case 3:
-                fragment = AntennaSettingsFragment.newInstance();
+                fragment = BatteryFragment.newInstance();
                 break;
 
            /* case 4:
                 fragment = SingulationControlFragment.newInstance();
                 break;*/
 
-            case 4:
+          /*  case 4:
                 fragment = StartStopTriggersFragment.newInstance();
-                break;
+                break;*/
 
           /*  case 6:
                 fragment = TagReportingFragment.newInstance();
@@ -101,9 +102,13 @@ public class SettingsDetailActivity extends AppCompatActivity implements Respons
                 fragment = BatteryFragment.newInstance();
                 break;*/
 
-            case 5:
+           /* case 5:
                 fragment = DPOSettingsFragment.newInstance();
                 break;
+
+            case 6:
+                fragment = BatteryFragment.newInstance();
+                break;*/
 
            /* case 10:
                 fragment = BeeperFragment.newInstance();
@@ -301,7 +306,7 @@ public class SettingsDetailActivity extends AppCompatActivity implements Respons
             ((ReadersListFragment) fragment).readerDisconnected(device);
         } else if (fragment instanceof BatteryFragment) {
             ((BatteryFragment) fragment).deviceDisconnected();
-        }else if (fragment instanceof DPOSettingsFragment) {
+        } else if (fragment instanceof DPOSettingsFragment) {
             ((DPOSettingsFragment) fragment).deviceDisconnected();
         } /*else if (fragment instanceof BeeperFragment) {
             ((BeeperFragment) fragment).deviceDisconnected();

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Viacom18AssetTrack</string>
+    <string name="app_name">BcilRfidDemo</string>
     <string name="main_menu">Main Menu</string>
     <string name="rfid_mapping">RFID Mapping</string>
     <string name="scan_asset">Scan Asset</string>
