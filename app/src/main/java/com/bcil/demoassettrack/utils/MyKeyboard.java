@@ -122,7 +122,7 @@ public class MyKeyboard extends InputMethodService
     private PreferenceManager preferenceManager;
     private String getData;
     private BroadcastReceiver mReceiver;
-    private List<String> stringList;
+    public List<String> stringList;
     private Runnable runnable;
     @Override
     public void onCreate() {
@@ -208,12 +208,13 @@ public class MyKeyboard extends InputMethodService
                 //log our message value
                 Log.i("ONRECEIVE:", getData);
                 if (getData != null) {
-                    stringList.add(getData);
-                    Log.d(TAG, "CheckListSize:"+stringList.size());
-                    if(stringList!=null&&stringList.size()==1){
-                        inputConnection.commitText(stringList.get(0)+"\n", 1);
-                    }
-
+                   new MappingFragment().scanstatus = true;
+                   inputConnection.commitText(getData+"\n", 1);
+                    /*try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }*/
                     Log.d(MyKeyboard.class.getSimpleName(), "run:"+getData);
                 } else {
                     inputConnection.commitText(AppConstants.EMPTY, 1);
@@ -239,19 +240,6 @@ public class MyKeyboard extends InputMethodService
     }
 
 
-    /*@Override
-    public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
-        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
-        *//*if (mComposing.length() > 0 && (newSelStart != candidatesEnd
-                || newSelEnd != candidatesEnd)) {
-            mComposing.setLength(0);
-            updateCandidates();
-            InputConnection ic = getCurrentInputConnection();
-            if (ic != null) {
-                ic.finishComposingText();
-            }
-        }*//*
-    }*/
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
@@ -821,9 +809,6 @@ public class MyKeyboard extends InputMethodService
         return mRunning;
     }
 
-    protected void setRunning(boolean isRunning) {
-        this.mRunning = isRunning;
-    }
 
     /*@SuppressLint("StaticFieldLeak")
     private class BTConnector extends AsyncTask<Object, Boolean, Boolean> {
@@ -927,10 +912,6 @@ public class MyKeyboard extends InputMethodService
     }*/
 
 
-    //dialog fragment
-    @SuppressLint("ValidFragment")
-    public class DeviceSelectDialogFragment extends DialogFragment {
 
-    }
 
 }

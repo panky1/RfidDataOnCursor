@@ -83,6 +83,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
     AutoCompleteTextView aTAstDsc;
     @Bind(R.id.btStart)
     Button btStart;
+    public boolean scanstatus;
     private PreferenceManager preferenceManager;
     private List<AssetInfo> assetInfoList;
     private String getUserName;
@@ -129,7 +130,8 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
 //            new AsyncLoaAssetIdAndDesc().execute();
             Gson gson = new Gson();
             String json = preferenceManager.getPreferenceValues(AppConstants.GETIDANDDESCLIST);
-            Type type = new TypeToken<List<AssetInfo>>(){}.getType();
+            Type type = new TypeToken<List<AssetInfo>>() {
+            }.getType();
             List<AssetInfo> assetInfoList = gson.fromJson(json, type);
             if (assetInfoList != null && assetInfoList.size() > 0) {
                 preferenceManager.putPreferenceIntValues(AppConstants.GETASSETIDANDDESCSTATUS, 1);
@@ -186,7 +188,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
         if (MyApp.antennaRfConfig != null) {
             int powerLevelIndex = -1;
             try {
-                powerLevelIndex = 30;
+                powerLevelIndex = 70;
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
@@ -285,7 +287,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 SettingListFragment settingsFragment = new SettingListFragment();
                 android.support.v4.app.FragmentTransaction fragmentTransaction5
                         = getFragmentManager().beginTransaction();
-                fragmentTransaction5.replace(R.id.main_container,settingsFragment);
+                fragmentTransaction5.replace(R.id.main_container, settingsFragment);
                 fragmentTransaction5.addToBackStack(null);
                 fragmentTransaction5.commit();
                 return true;
@@ -295,7 +297,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 new AsyncDeleteAllData().execute();
                 new MainActivity().i = 0;
                 getRfidData = null;
-                preferenceManager.putPreferenceValues(AppConstants.GETIDANDDESCLIST,AppConstants.EMPTY);
+                preferenceManager.putPreferenceValues(AppConstants.GETIDANDDESCLIST, AppConstants.EMPTY);
                 triggerReleaseEventRecieved();
                 preferenceManager.clearSharedPreferance();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -318,17 +320,6 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btSave:
-                if (new NetworkUtils().isNetworkAvailable(Objects.requireNonNull(getActivity()))) {
-                    if (checkValidation()) {
-                       /* AsyncValidateScanRfid asyncValidateScanRfid = new AsyncValidateScanRfid("VALIDATERFID", getUserName, etAssetNo.getText().toString().trim(), etScan.getText().toString().trim(), "0");
-                        asyncValidateScanRfid.execute("");*/
-
-                    } else {
-                        Toast.makeText(getActivity(), "Please enter the required fields", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "Please check internet connection and try again.", Toast.LENGTH_SHORT).show();
-                }
                 break;
             case R.id.btClose:
                 preferenceManager.putPreferenceIntValues(AppConstants.RFIDSCANSTATUS, 0);
@@ -351,21 +342,17 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
             etScan.requestFocus();
         getRfidData = inventoryListItem.getMemoryBankData();
         if (getRfidData != null) {
-            /*if (etScan != null) {*/
+            if(!scanstatus){
                 Intent i = new Intent("android.intent.action.MAIN").putExtra(AppConstants.RFIDDATA, getRfidData);
                 Objects.requireNonNull(getActivity()).sendBroadcast(i);
-                if(getRfidData!=null){
-                    Log.d(MappingFragment.class.getSimpleName(), "GETRFIDDATA:"+getRfidData);
-                }else{
-                    Log.d(MappingFragment.class.getSimpleName(), "GETRFIDDATA:"+"null");
-                }
-//            }
+            }
+
+            if (getRfidData != null) {
+                Log.d(MappingFragment.class.getSimpleName(), "GETRFIDDATA:" + getRfidData);
+            } else {
+                Log.d(MappingFragment.class.getSimpleName(), "GETRFIDDATA:" + "null");
+            }
         }
-       /* else {
-            if (etScan != null)
-                new AssetInfo().setRfid("123");
-//                etScan.setText(AppConstants.EMPTY);
-        }*/
 
     }
 
@@ -396,6 +383,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void run() {
+                    scanstatus = false;
                     ((MainActivity) getActivity()).inventoryStartOrStop(btStart);
                 }
             });
@@ -459,180 +447,6 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
 
     }
 
-   /* public void handleTagResponse1(TagData tagData) {
-        Log.d(MappingFragment.class.getSimpleName(), "handleTagResponse1:"+tagData.getTagID());
-
-    }*/
-
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncGetAssetIdAndDesc extends AsyncTask<Object, Object, String> {
-        String mode, username, assetid, rfid, status;
-        private ProgressDialog progressDialog;
-
-        AsyncGetAssetIdAndDesc(String mode, String username, String assetid, String rfid, String status) {
-            this.mode = mode;
-            this.username = username;
-            this.assetid = assetid;
-            this.rfid = rfid;
-            this.status = status;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new CommonUtils().startProgressBarDialog(getActivity(), "Please wait fetching assetid and description...");
-        }
-
-        @Override
-        protected String doInBackground(Object... params) {
-            try {
-                return DataSelections.fetchAssetIdAndDesc(mode, username, assetid, rfid, status, getActivity());
-            } catch (Exception ex) {
-                try {
-                    throw ex;
-                } catch (final IOException | XmlPullParserException e1) {
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (e1.toString().startsWith("java.net.ConnectException: failed to connect")) {
-                                new CommonUtils().Alert(getActivity(), "Alert", "Failed to connect,Please try again.");
-                            } else if (e1.toString().startsWith("java.net.SocketTimeoutException: failed to connect")) {
-                                new CommonUtils().Alert(getActivity(), "Alert", "Failed to connect,Please try again.");
-                            }
-
-                        }
-                    });
-                }
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(final String result) {
-            progressDialog.dismiss();
-            if (result != null) {
-                try {
-                    assetInfoList = JsonController.jsonToOneDimenStrAstIdAndDescDtls(result);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (assetInfoList != null && assetInfoList.size() > 0) {
-                    preferenceManager.putPreferenceIntValues(AppConstants.GETASSETIDANDDESCSTATUS, 1);
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<AssetInfo>>() {}.getType();
-                    String list = gson.toJson(assetInfoList, type);
-                    preferenceManager.putPreferenceValues(AppConstants.GETIDANDDESCLIST,list);
-                    CustomAssetIdAdapter customAssetIdAdapter = new CustomAssetIdAdapter(getActivity(), R.layout.assetid_list_row, assetInfoList, "ASSETID");
-                    aTAstId.setThreshold(1);
-                    aTAstId.setAdapter(customAssetIdAdapter);
-                    CustomAssetIdAdapter customAssetIdAdapter1 = new CustomAssetIdAdapter(getActivity(), R.layout.assetid_list_row, assetInfoList, "ASSETDESC");
-                    aTAstDsc.setThreshold(1);
-                    aTAstDsc.setAdapter(customAssetIdAdapter1);
-                } else {
-                    Toast.makeText(getActivity(), "Something went wrong please try again", Toast.LENGTH_SHORT).show();
-                }
-
-
-            } else {
-                Toast.makeText(getActivity(), "Something went wrong please try again", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncValidateScanRfid extends AsyncTask<Object, Object, String> {
-        private String mode, getUserName, assetId, scanRfid, status;
-        private ProgressDialog progressDialog;
-
-        AsyncValidateScanRfid(String mode, String getUserName, String assetId, String scanRfid, String status) {
-            this.mode = mode;
-            this.getUserName = getUserName;
-            this.assetId = assetId;
-            this.scanRfid = scanRfid;
-            this.status = status;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new CommonUtils().startProgressBarDialog(getActivity(), "Please wait validating scanned rfid...");
-        }
-
-        @Override
-        protected String doInBackground(Object... objects) {
-            try {
-                return DataSelections.fetchAssetIdAndDesc(mode, getUserName, assetId, scanRfid, status, getActivity());
-            } catch (Exception ex) {
-                try {
-                    throw ex;
-                } catch (final IOException | XmlPullParserException e1) {
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (e1.toString().startsWith("java.net.ConnectException: failed to connect")) {
-                                new CommonUtils().Alert(getActivity(), "Alert", "Failed to connect,Please try again.");
-                            } else if (e1.toString().startsWith("java.net.SocketTimeoutException: failed to connect")) {
-                                new CommonUtils().Alert(getActivity(), "Alert", "Failed to connect,Please try again.");
-                            }
-
-                        }
-                    });
-                }
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
-            if (result != null) {
-                if (result.contains("MAPPING")) {
-                    aTAstId.setText(AppConstants.EMPTY);
-                    aTAstDsc.setText(AppConstants.EMPTY);
-                    etAssetNo.setText(AppConstants.EMPTY);
-                    etScan.setText(AppConstants.EMPTY);
-                    aTAstId.requestFocus();
-                    Toast.makeText(getActivity(), "MAPPING DONE SUCCESSFULLY.", Toast.LENGTH_SHORT).show();
-                } else if (result.contains("RFID ALREADY IN USE")) {
-                    new CommonUtils().Alert(getActivity(), "Alert", result);
-                } else if (result.contains("ARE YOU")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-                    builder.setMessage("Asset is already mapped,Do you want to remapping?")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    if (new NetworkUtils().isNetworkAvailable(getActivity())) {
-                                        if (checkValidation()) {
-                                            AsyncValidateScanRfid asyncValidateScanRfid = new AsyncValidateScanRfid("VALIDATERFID", getUserName, aTAstId.getText().toString().trim(), etScan.getText().toString().trim(), "1");
-                                            asyncValidateScanRfid.execute("");
-                                        } else {
-                                            Toast.makeText(getActivity(), "Please enter the required fields", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(getActivity(), "Please check internet connection and try again.", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            })
-
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    arg0.dismiss();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            } else {
-                Toast.makeText(getActivity(), "Something went wrong please try again", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
-
 
     @SuppressLint("StaticFieldLeak")
     public class AsyncDeleteAllData extends AsyncTask<Object, Object, String> {
@@ -642,7 +456,6 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
             databaseHandler.daoAccess().deleteAllScanTagList();
             return null;
         }
-
 
 
     }
