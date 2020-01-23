@@ -48,16 +48,8 @@ import com.bcil.demoassettrack.ui.activity.LoginActivity;
 import com.bcil.demoassettrack.ui.activity.MainActivity;
 import com.bcil.demoassettrack.utils.AppConstants;
 import com.bcil.demoassettrack.utils.CommonUtils;
-import com.bcil.demoassettrack.utils.JsonController;
-import com.bcil.demoassettrack.utils.NetworkUtils;
 import com.bcil.demoassettrack.utils.PreferenceManager;
-import com.bcil.demoassettrack.utils.Validation;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.zebra.rfid.api3.RFIDResults;
-
-import org.json.JSONException;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -123,64 +115,6 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
     }
 
     private void initData() {
-        status = preferenceManager.getPreferenceIntValues(AppConstants.GETASSETIDANDDESCSTATUS);
-        if (status == 0) {
-            inflateAssetIdAndDesc();
-        } else {
-//            new AsyncLoaAssetIdAndDesc().execute();
-            Gson gson = new Gson();
-            String json = preferenceManager.getPreferenceValues(AppConstants.GETIDANDDESCLIST);
-            Type type = new TypeToken<List<AssetInfo>>() {
-            }.getType();
-            List<AssetInfo> assetInfoList = gson.fromJson(json, type);
-            if (assetInfoList != null && assetInfoList.size() > 0) {
-                preferenceManager.putPreferenceIntValues(AppConstants.GETASSETIDANDDESCSTATUS, 1);
-                CustomAssetIdAdapter customAssetIdAdapter = new CustomAssetIdAdapter(getActivity(), R.layout.assetid_list_row, assetInfoList, "ASSETID");
-                aTAstId.setThreshold(1);
-                aTAstId.setAdapter(customAssetIdAdapter);
-                CustomAssetIdAdapter customAssetIdAdapter1 = new CustomAssetIdAdapter(getActivity(), R.layout.assetid_list_row, assetInfoList, "ASSETDESC");
-                aTAstDsc.setThreshold(1);
-                aTAstDsc.setAdapter(customAssetIdAdapter1);
-            }
-        }
-        aTAstId.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AssetInfo assetInfo = (AssetInfo) parent.getAdapter().getItem(position);
-                aTAstDsc.setText(assetInfo.getAssetdesc());
-                etAssetNo.setText(aTAstId.getText().toString().trim());
-                new CommonUtils().hideKeyboardOnLeaving(Objects.requireNonNull(getActivity()));
-//                etScan.requestFocus();
-            }
-        });
-        aTAstDsc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AssetInfo assetInfo = (AssetInfo) parent.getAdapter().getItem(position);
-                aTAstId.setText(assetInfo.getAssetid());
-                etAssetNo.setText(assetInfo.getAssetid());
-                new CommonUtils().hideKeyboardOnLeaving(Objects.requireNonNull(getActivity()));
-//                etScan.requestFocus();
-            }
-        });
-        etScan.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                etScan.setError(null);
-                etScan.setFocusable(true);
-            }
-        });
         saveConfig();
     }
 
@@ -208,22 +142,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
         }
     }
 
-    private void inflateAssetIdAndDesc() {
-       /* if (new NetworkUtils().isNetworkAvailable(Objects.requireNonNull(getActivity()))) {
-            AsyncGetAssetIdAndDesc asyncGetAssetIdAndDesc = new AsyncGetAssetIdAndDesc("GETASSETIDANDESC", AppConstants.EMPTY, AppConstants.EMPTY, AppConstants.EMPTY, "0");
-            asyncGetAssetIdAndDesc.execute("");
-        } else {
-            Toast.makeText(getActivity(), "Please check internet connection and try again.", Toast.LENGTH_SHORT).show();
 
-        }*/
-    }
-
-    private boolean checkValidation() {
-        boolean ret = true;
-        if (!Validation.hasActText(aTAstId)) ret = false;
-        if (!Validation.hasText(etScan)) ret = false;
-        return ret;
-    }
 
     private void initView() {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -258,12 +177,6 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 new MainActivity().i = 0;
                 getRfidData = null;
                 triggerReleaseEventRecieved();
-                /*MainMenuFragment mainMenuFragment = new MainMenuFragment();
-                FragmentTransaction fragmentTransaction
-                        = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.main_container, mainMenuFragment);
-                fragmentTransaction.addToBackStack(MappingFragment.class.getSimpleName());
-                fragmentTransaction.commit();*/
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
                 builder.setMessage("Are you sure you want to exit")
                         .setCancelable(false)
@@ -347,11 +260,6 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                 Objects.requireNonNull(getActivity()).sendBroadcast(i);
             }
 
-            if (getRfidData != null) {
-                Log.d(MappingFragment.class.getSimpleName(), "GETRFIDDATA:" + getRfidData);
-            } else {
-                Log.d(MappingFragment.class.getSimpleName(), "GETRFIDDATA:" + "null");
-            }
         }
 
     }
@@ -391,7 +299,7 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
 
     @Override
     public void triggerReleaseEventRecieved() {
-        if (MyApp.mIsInventoryRunning)
+        if (MyApp.mIsInventoryRunning){
             getActivity().runOnUiThread(new Runnable() {
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
@@ -399,6 +307,10 @@ public class MappingFragment extends Fragment implements ResponseHandlerInterfac
                     ((MainActivity) getActivity()).inventoryStartOrStop(btStart);
                 }
             });
+
+        }
+
+
     }
 
     @Override

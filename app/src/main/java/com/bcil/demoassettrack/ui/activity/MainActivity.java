@@ -13,11 +13,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -70,6 +73,8 @@ import com.zebra.rfid.api3.TagAccess;
 import com.zebra.rfid.api3.TagData;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -100,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
     public int i =0;
     private RfidListAdapter rfidListAdapter;
     private ProgressDialog pDialog;
-
+    private Handler mHandler;
+    public List<String> stringList = new ArrayList<>();
     public static void addBluetoothDeviceFoundHandler(ResponseHandlerInterfaces.BluetoothDeviceFoundHandler bluetoothDeviceFoundHandler) {
         bluetoothDeviceFoundHandlers.add(bluetoothDeviceFoundHandler);
     }
@@ -148,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
         preferenceManager = new PreferenceManager(MainActivity.this);
         initBluetooth();
         initData();
+
     }
 
     private void initBluetooth() {
@@ -366,8 +373,10 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
         }
 
         @Override
-        public void eventStatusNotify(RfidStatusEvents rfidStatusEvents) {
+        public void eventStatusNotify(final RfidStatusEvents rfidStatusEvents) {
             System.out.println("Status Notification: " + rfidStatusEvents.StatusEventData.getStatusEventType());
+
+
             notificationFromGenericReader(rfidStatusEvents);
         }
     }
@@ -1161,6 +1170,8 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
                     clearInventoryData();
                     if(button!=null)
                     button.setText("STOP");
+
+
                     preferenceManager.putPreferenceIntValues(AppConstants.RFIDSCANSTATUS,0);
                     rfidListAdapter = new RfidListAdapter(MainActivity.this,new ArrayList<AssetInfo>());
                     rfidListAdapter.clear();
@@ -1236,6 +1247,8 @@ public class MainActivity extends AppCompatActivity implements Readers.RFIDReade
                     //Here we send the abort command to stop the inventory
                     try {
                         MyApp.mConnectedReader.Actions.Inventory.stop();
+                        Intent i = new Intent("android.intent.action.MAIN").putExtra(AppConstants.TRIGGERSTATUS, "STOP");
+                        sendBroadcast(i);
                         if (((MyApp.settings_startTrigger != null && (MyApp.settings_startTrigger.getTriggerType() == START_TRIGGER_TYPE.START_TRIGGER_TYPE_HANDHELD || MyApp.settings_startTrigger.getTriggerType() == START_TRIGGER_TYPE.START_TRIGGER_TYPE_PERIODIC)))
                                 || (MyApp.isBatchModeInventoryRunning != null && MyApp.isBatchModeInventoryRunning))
                             operationHasAborted();

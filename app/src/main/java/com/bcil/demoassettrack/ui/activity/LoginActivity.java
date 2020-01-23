@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         preferenceManager.putPreferenceIntValues(AppConstants.LOGINSTATUS, 1);
         int getLoginStatus = preferenceManager.getPreferenceIntValues(AppConstants.LOGINSTATUS);
         etUserId.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-        filePermission();
+//        filePermission();
         secureOverEditText();
         if (getLoginStatus == 1) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

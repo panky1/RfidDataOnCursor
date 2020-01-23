@@ -25,6 +25,7 @@ public final class AppConstants {
     public static final String GETASSETIDANDDESCSTATUS = "GETASSETIDANDDESCSTATUS";
     public static final String GETIDANDDESCLIST = "GETIDANDDESCLIST";
     public static final String RFIDDATA = "RFIDDATA";
+    public static final String TRIGGERSTATUS = "TRIGGERSTATUS";
     public static  String URL;
     public static final String NOTIFICATIONS_TEXT = "notifications_text";
     public static final String NOTIFICATIONS_ID = "notifications_id";
